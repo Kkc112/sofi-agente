@@ -18,7 +18,9 @@
       "Write",
       "Edit",
       "Glob",
-      "Grep"
+      "Grep",
+      "PowerShell(Copy-Item *)",
+      "Bash(python *)"
     ]
   }
 }
