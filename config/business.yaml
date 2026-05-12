@@ -1,22 +1,22 @@
 # Configuración del negocio — Generado por AgentKit
 negocio:
-  nombre: "Demo Asistente IA para Psicólogos"
+  nombre: "Consultorio de Psicología — Recoleta"
   descripcion: >
-    Agencia de automatización que provee asistentes inteligentes especializados
-    para consultorios de psicología. El asistente se encarga de la recepción de
-    pacientes, filtrado de consultas iniciales y coordinación de la agenda profesional.
-    Modalidad presencial en Villa María/Córdoba y online mediante plataforma encriptada.
+    Consultorio de psicología en Recoleta, Buenos Aires.
+    Ofrece atención individual en modalidad presencial (Recoleta) y online
+    mediante plataforma encriptada. Sofi gestiona el agendamiento de turnos,
+    responde consultas frecuentes y filtra nuevos pacientes.
   horario: "Lunes a Viernes de 08:00 a 20:00hs"
-  ubicacion: "Villa María, Córdoba, Argentina"
+  ubicacion: "Recoleta, Buenos Aires, Argentina"
 
 agente:
   nombre: "Sofi"
-  tono: "Empático, cálido y profesional — con voseo argentino"
+  tono: "Directo, cálido y sin rodeos — voseo argentino"
   casos_de_uso:
     - "Responder preguntas frecuentes sobre sesiones y servicios"
-    - "Agendar turnos de manera automatizada"
-    - "Calificar nuevos pacientes (motivo de consulta) antes de derivarlos al profesional"
+    - "Agendar turnos (oferta fija: Martes 15:00 o Jueves 11:30)"
+    - "Calificar nuevos pacientes antes de derivarlos al profesional"
 
 metadata:
   creado: "2026-05-07"
-  version: "1.0"
+  version: "2.0"
