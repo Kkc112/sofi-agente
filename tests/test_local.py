@@ -23,11 +23,11 @@ async def main():
 
     print()
     print("=" * 55)
-    print("   Sofi — Asistente Virtual para Psicólogos")
+    print("   Sofi — Setter Comercial | Espacio Madero")
     print("   Test Local — AgentKit")
     print("=" * 55)
     print()
-    print("  Escribí mensajes como si fueras un paciente.")
+    print("  Escribí mensajes como si fueras un cliente.")
     print("  Comandos especiales:")
     print("    'limpiar'  — borra el historial de la conversación")
     print("    'salir'    — termina el test")
@@ -37,7 +37,7 @@ async def main():
 
     while True:
         try:
-            mensaje = input("Paciente: ").strip()
+            mensaje = input("Cliente: ").strip()
         except (EOFError, KeyboardInterrupt):
             print("\n\nTest finalizado.")
             break
