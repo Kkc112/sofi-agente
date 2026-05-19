@@ -1,5 +1,4 @@
-# agent/main.py — Servidor FastAPI + Webhook de WhatsApp
-# Generado por AgentKit
+# agent/main.py — Servidor FastAPI + Webhook de WhatsApp (Demo Camaleón Universal)
 
 import os
 import logging
@@ -8,8 +7,14 @@ from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import PlainTextResponse
 from dotenv import load_dotenv
 
-from agent.brain import generar_respuesta
-from agent.memory import inicializar_db, guardar_mensaje, obtener_historial
+from agent.brain import procesar_mensaje
+from agent.memory import (
+    inicializar_db,
+    guardar_mensaje,
+    obtener_historial,
+    obtener_sesion,
+    guardar_sesion,
+)
 from agent.providers import obtener_proveedor
 
 load_dotenv()
@@ -33,15 +38,15 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="AgentKit — Sofi, Asistente Virtual para Psicólogos",
-    version="1.0.0",
-    lifespan=lifespan
+    title="AgentKit — Demo Camaleón Universal",
+    version="2.0.0",
+    lifespan=lifespan,
 )
 
 
 @app.get("/")
 async def health_check():
-    return {"status": "ok", "service": "agentkit", "agente": "Sofi"}
+    return {"status": "ok", "service": "agentkit", "version": "2.0.0"}
 
 
 @app.get("/webhook")
@@ -63,17 +68,26 @@ async def webhook_handler(request: Request):
 
             logger.info(f"Mensaje de {msg.telefono}: {msg.texto}")
 
-            # Obtener historial ANTES de guardar el mensaje actual
+            # Obtener historial y estado de sesión ANTES de guardar el mensaje actual
             historial = await obtener_historial(msg.telefono)
+            sesion = await obtener_sesion(msg.telefono)
 
-            respuesta = await generar_respuesta(msg.texto, historial)
+            logger.debug(f"Fase actual de {msg.telefono}: {sesion.fase}")
 
+            # Procesar mensaje según la fase (brain maneja la máquina de estados)
+            respuesta, sesion_actualizada = await procesar_mensaje(
+                msg.texto, historial, sesion
+            )
+
+            # Persistir mensaje del usuario, respuesta y estado actualizado
             await guardar_mensaje(msg.telefono, "user", msg.texto)
             await guardar_mensaje(msg.telefono, "assistant", respuesta)
+            await guardar_sesion(sesion_actualizada)
 
+            # Enviar respuesta por WhatsApp
             await proveedor.enviar_mensaje(msg.telefono, respuesta)
 
-            logger.info(f"Respuesta a {msg.telefono}: {respuesta}")
+            logger.info(f"[{sesion_actualizada.fase}] Respuesta a {msg.telefono}: {respuesta[:80]}...")
 
         return {"status": "ok"}
 
