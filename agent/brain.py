@@ -26,30 +26,36 @@ def _cargar_prompts() -> dict:
 async def _extraer_datos_negocio(mensaje: str) -> dict | None:
     """
     Llama a Haiku para extraer niche, business_name y min_price del mensaje del usuario.
-    Retorna un dict con las claves o None si no se pudieron extraer los mínimos requeridos.
+    Retorna un dict si se puede identificar al menos el niche. Nunca retorna None por
+    falta de nombre: si el usuario no lo da, se genera uno por defecto.
     """
     try:
         response = await client.messages.create(
             model="claude-haiku-4-5-20251001",
             max_tokens=200,
             system=(
-                "Extraé exactamente estos datos del mensaje de un dueño de negocio. "
-                "Respondé SOLO con JSON válido, sin texto adicional ni bloques de código, con estas claves: "
-                "niche (tipo/rubro de negocio), business_name (nombre del negocio), min_price (precio o ticket mínimo). "
-                "Si algún dato no está presente, usá null. "
-                'Ejemplo: {"niche": "peluquería", "business_name": "Cortes Express", "min_price": "$50"}'
+                "Extraé datos del mensaje de un dueño de negocio. "
+                "Respondé SOLO con JSON válido, sin texto adicional ni bloques de código, con estas claves:\n"
+                "- niche: el rubro o tipo de negocio (obligatorio si se menciona de cualquier forma)\n"
+                "- business_name: el nombre comercial del negocio. "
+                "  Si el usuario dice que no tiene nombre, que es nuevo, que no lo menciona, "
+                "  o si simplemente no aparece en el mensaje, ponés null (NO uses el rubro como nombre).\n"
+                "- min_price: precio, ticket o tarifa mencionada. Si no hay, null.\n"
+                "El único campo REQUERIDO es niche. Si no podés identificar ningún rubro, retorná null.\n"
+                'Ejemplo con nombre: {"niche": "peluquería", "business_name": "Cortes Express", "min_price": "$50"}\n'
+                'Ejemplo sin nombre: {"niche": "hoteles", "business_name": null, "min_price": "100 usd"}'
             ),
             messages=[{"role": "user", "content": mensaje}],
         )
         raw = response.content[0].text.strip()
-        # Remover bloques de código markdown si Haiku los incluye
         if raw.startswith("```"):
             raw = raw.split("```")[1]
             if raw.startswith("json"):
                 raw = raw[4:]
             raw = raw.strip()
         datos = json.loads(raw)
-        if datos.get("business_name") and datos.get("niche"):
+        # Solo requerimos niche para avanzar
+        if datos.get("niche"):
             return datos
         return None
     except Exception as e:
@@ -99,9 +105,11 @@ async def _fase_onboarding(
     # El usuario ya recibió el saludo — intentar extraer los datos del negocio
     datos = await _extraer_datos_negocio(mensaje)
 
-    if datos and datos.get("business_name") and datos.get("niche"):
-        sesion.business_name = datos["business_name"]
-        sesion.niche = datos["niche"]
+    if datos and datos.get("niche"):
+        niche = datos["niche"]
+        # Si el usuario no dio nombre, se genera uno genérico antes de avanzar
+        sesion.business_name = datos.get("business_name") or f"Negocio de {niche.capitalize()}"
+        sesion.niche = niche
         sesion.min_price = datos.get("min_price") or "a convenir"
         sesion.fase = "SIMULATION"
         sesion.simulation_messages_count = 0
