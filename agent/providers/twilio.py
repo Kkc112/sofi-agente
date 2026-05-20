@@ -20,11 +20,28 @@ class ProveedorTwilio(ProveedorWhatsApp):
         self.phone_number = os.getenv("TWILIO_PHONE_NUMBER")
 
     async def parsear_webhook(self, request: Request) -> list[MensajeEntrante]:
-        """Parsea el payload form-encoded de Twilio."""
+        """Parsea el payload form-encoded de Twilio (texto o audio)."""
         form = await request.form()
-        texto = form.get("Body", "")
         telefono = form.get("From", "").replace("whatsapp:", "")
         mensaje_id = form.get("MessageSid", "")
+        num_media = int(form.get("NumMedia", "0") or "0")
+
+        # Mensaje de audio
+        if num_media > 0:
+            content_type = form.get("MediaContentType0", "")
+            audio_url = form.get("MediaUrl0", "")
+            if content_type.startswith("audio/") and audio_url:
+                logger.info(f"Audio recibido de {telefono} — tipo: {content_type}")
+                return [MensajeEntrante(
+                    telefono=telefono,
+                    texto="",
+                    mensaje_id=mensaje_id,
+                    es_propio=False,
+                    audio_url=audio_url,
+                )]
+
+        # Mensaje de texto normal
+        texto = form.get("Body", "")
         if not texto:
             return []
         return [MensajeEntrante(

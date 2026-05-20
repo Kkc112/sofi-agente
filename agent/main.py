@@ -1,11 +1,14 @@
 # agent/main.py — Servidor FastAPI + Webhook de WhatsApp (Demo Camaleón Universal)
 
+import io
 import os
 import logging
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import PlainTextResponse
 from dotenv import load_dotenv
+import httpx
+from openai import AsyncOpenAI
 
 from agent.brain import procesar_mensaje
 from agent.memory import (
@@ -27,6 +30,49 @@ logger = logging.getLogger("agentkit")
 
 proveedor = obtener_proveedor()
 PORT = int(os.getenv("PORT", 8000))
+openai_client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+
+async def transcribir_audio(audio_url: str) -> str | None:
+    """
+    Descarga un audio de Twilio y lo transcribe con OpenAI Whisper.
+    Retorna el texto transcripto, o None si algo falla.
+    """
+    account_sid = os.getenv("TWILIO_ACCOUNT_SID")
+    auth_token = os.getenv("TWILIO_AUTH_TOKEN")
+    try:
+        async with httpx.AsyncClient(timeout=30) as http:
+            r = await http.get(audio_url, auth=(account_sid, auth_token))
+            r.raise_for_status()
+
+        # Determinar extensión según Content-Type para que Whisper reconozca el formato
+        content_type = r.headers.get("content-type", "audio/ogg")
+        if "ogg" in content_type:
+            ext = "ogg"
+        elif "amr" in content_type:
+            ext = "amr"
+        elif "mp4" in content_type or "m4a" in content_type:
+            ext = "mp4"
+        elif "mpeg" in content_type or "mp3" in content_type:
+            ext = "mp3"
+        else:
+            ext = "ogg"
+
+        audio_bytes = io.BytesIO(r.content)
+        audio_bytes.name = f"audio.{ext}"
+
+        transcripcion = await openai_client.audio.transcriptions.create(
+            model="whisper-1",
+            file=audio_bytes,
+            language="es",
+        )
+        texto = transcripcion.text.strip()
+        logger.info(f"Audio transcripto: {texto[:100]}")
+        return texto if texto else None
+
+    except Exception as e:
+        logger.error(f"Error transcribiendo audio: {e}")
+        return None
 
 
 @asynccontextmanager
@@ -64,7 +110,22 @@ async def webhook_handler(request: Request):
         mensajes = await proveedor.parsear_webhook(request)
 
         for msg in mensajes:
-            if msg.es_propio or not msg.texto:
+            if msg.es_propio:
+                continue
+
+            # Si es audio, transcribirlo antes de seguir
+            if msg.audio_url:
+                transcripcion = await transcribir_audio(msg.audio_url)
+                if not transcripcion:
+                    await proveedor.enviar_mensaje(
+                        msg.telefono,
+                        "No pude escuchar el audio. ¿Podés escribirme lo que necesitás?",
+                    )
+                    continue
+                msg.texto = transcripcion
+                logger.info(f"Audio de {msg.telefono} → '{msg.texto[:80]}'")
+
+            if not msg.texto:
                 continue
 
             logger.info(f"Mensaje de {msg.telefono}: {msg.texto}")
