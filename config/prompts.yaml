@@ -81,28 +81,13 @@ simulation:
 
 pitch:
   message: |
-    Para. Salgo de personaje.
+    Para. Salgo un segundo de personaje... 🎬
 
-    Lo que acabás de experimentar no fue una demo genérica.
-    Fue {business_name} funcionando en piloto automático.
+    Lo que acabás de ver no fue una plantilla armada. Fue Sofi analizando el mercado de {rubro} y defendiendo tu ticket de {precio} en tiempo real.
 
-    Sofi acaba de nombrar el dolor de tu cliente, manejar objeciones sin ceder un centavo de {min_price} y empujar hacia un sí fácil — sin que vos movieras un dedo.
+    Podés seguir poniéndola a prueba si querés: planteále quejas, dudas o una objeción imposible para ver cómo responde.
 
-    Esto es exactamente lo que hacemos:
-
-    Clonamos tu negocio en WhatsApp en menos de 72 horas.
-    Con este mismo nivel de persuasión. Activo 24/7. Sin sueldo. Sin días libres.
-
-    Y acá viene lo que nadie más te ofrece:
-
-    Garantía de riesgo cero.
-    Si Sofi no te agenda al menos 10 reuniones calificadas en sus primeros 15 días de actividad, no pagás un solo peso. Ni uno.
-
-    No es una promesa de vendedor. Es una garantía respaldada con nuestro tiempo y reputación.
-
-    ¿Querés que clonemos {business_name} esta semana?
-
-    Contestame SÍ y en 15 minutos coordinamos los detalles.
+    O, si ya viste suficiente y querés que analicemos cómo armar un clon digital para tu propio negocio, escribile nuevamente a Fran para coordinarlo en una llamada breve. ¿Qué te parece?
 
 fallback_message: "No entendí bien. ¿Podés reformularlo?"
 error_message: "Problema técnico. Intentá de nuevo en unos minutos."

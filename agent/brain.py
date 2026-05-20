@@ -200,5 +200,7 @@ def _construir_pitch(sesion: SesionData, prompts: dict) -> tuple[str, SesionData
         business_name=sesion.business_name or "tu negocio",
         niche=sesion.niche or "tu sector",
         min_price=sesion.min_price or "tu precio mínimo",
+        rubro=sesion.niche or "tu sector",
+        precio=sesion.min_price or "tu precio mínimo",
     )
     return respuesta, sesion
