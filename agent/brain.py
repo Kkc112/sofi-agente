@@ -78,8 +78,10 @@ async def procesar_mensaje(
         return await _fase_onboarding(mensaje, historial, sesion, prompts)
     elif sesion.fase == "SIMULATION":
         return await _fase_simulation(mensaje, historial, sesion, prompts)
-    else:
-        return await _fase_pitch(sesion, prompts)
+    elif sesion.fase == "POST_PITCH":
+        return await _fase_post_pitch(mensaje, historial, sesion, prompts)
+    else:  # "PITCH" — envía el pitch una vez y transiciona a POST_PITCH
+        return _construir_pitch(sesion, prompts)
 
 
 # ── Fase 1: ONBOARDING ───────────────────────────────────────────────────────
@@ -185,16 +187,48 @@ async def _fase_pitch(sesion: SesionData, prompts: dict) -> tuple[str, SesionDat
     return _construir_pitch(sesion, prompts)
 
 
+# ── Fase 4: POST_PITCH — simulación libre sin repetir el pitch ────────────────
+
+async def _fase_post_pitch(
+    mensaje: str,
+    historial: list[dict],
+    sesion: SesionData,
+    prompts: dict,
+) -> tuple[str, SesionData]:
+    """Sofi responde en personaje libremente; el pitch NO se vuelve a enviar."""
+    sim = prompts.get("simulation", {})
+    system_template = sim.get("system_prompt", "Sos Sofi, una setter comercial experta.")
+    system_prompt = system_template.format(
+        business_name=sesion.business_name or "el negocio",
+        niche=sesion.niche or "servicios",
+        min_price=sesion.min_price or "a convenir",
+    )
+
+    mensajes = [{"role": m["role"], "content": m["content"]} for m in historial]
+    mensajes.append({"role": "user", "content": mensaje})
+
+    try:
+        response = await client.messages.create(
+            model="claude-sonnet-4-6",
+            max_tokens=512,
+            system=system_prompt,
+            messages=mensajes,
+        )
+        logger.info(f"POST_PITCH respuesta ({response.usage.output_tokens} tokens)")
+        return response.content[0].text, sesion
+    except Exception as e:
+        logger.error(f"Error en post_pitch: {e}")
+        return prompts.get("error_message", "Problema técnico. Intentá de nuevo."), sesion
+
+
 def _construir_pitch(sesion: SesionData, prompts: dict) -> tuple[str, SesionData]:
     template = prompts.get("pitch", {}).get(
         "message",
-        "¡Alto ahí! Salgo de personaje.\n\n"
-        "Como pudiste ver, acabo de perfilar al cliente, defendí tu precio mínimo de {min_price} "
-        "y busqué cerrar la cita para {business_name} sin dar vueltas.\n\n"
-        "Todo esto 24/7 en piloto automático.\n\n"
-        "Si querés que instale a Sofi en tu WhatsApp comercial real esta semana, "
-        "coordinemos una llamada de 15 min.\n\n"
-        "¿Te queda mejor mañana a las 11:00 o a las 16:00?",
+        "Para. Salgo un segundo de personaje... 🎬\n\n"
+        "Lo que acabás de ver no fue una plantilla armada. "
+        "Fue Sofi analizando el mercado de {rubro} y defendiendo tu ticket de {precio} en tiempo real.\n\n"
+        "Podés seguir poniéndola a prueba si querés: planteále quejas, dudas o una objeción imposible.\n\n"
+        "O escribile a Fran para coordinarlo en una llamada breve. ¿Qué te parece?",
     )
     respuesta = template.format(
         business_name=sesion.business_name or "tu negocio",
@@ -203,4 +237,6 @@ def _construir_pitch(sesion: SesionData, prompts: dict) -> tuple[str, SesionData
         rubro=sesion.niche or "tu sector",
         precio=sesion.min_price or "tu precio mínimo",
     )
+    # Transición: el pitch se envía una sola vez; los mensajes siguientes van a POST_PITCH
+    sesion.fase = "POST_PITCH"
     return respuesta, sesion
