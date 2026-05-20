@@ -20,7 +20,8 @@
       "Glob",
       "Grep",
       "PowerShell(Copy-Item *)",
-      "Bash(python *)"
+      "Bash(python *)",
+      "Bash(Remove-Item *)"
     ]
   }
 }

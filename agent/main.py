@@ -14,6 +14,7 @@ from agent.memory import (
     obtener_historial,
     obtener_sesion,
     guardar_sesion,
+    limpiar_todo,
 )
 from agent.providers import obtener_proveedor
 
@@ -67,6 +68,20 @@ async def webhook_handler(request: Request):
                 continue
 
             logger.info(f"Mensaje de {msg.telefono}: {msg.texto}")
+
+            # Comando de reinicio: borra sesión e historial completos
+            if msg.texto.strip().lower() in ("reiniciar", "reset"):
+                await limpiar_todo(msg.telefono)
+                respuesta = (
+                    "Listo, empezamos de cero.\n\n"
+                    "¡Hola! Soy Sofi, la IA de demostración.\n\n"
+                    "Sé que sos dueño de un negocio de servicios o eventos.\n\n"
+                    "Antes de mostrarte mis superpoderes, decime de forma directa: "
+                    "¿A qué nicho te dedicás, cómo se llama tu negocio y cuál es tu precio o ticket mínimo?"
+                )
+                await proveedor.enviar_mensaje(msg.telefono, respuesta)
+                logger.info(f"Sesión reiniciada para {msg.telefono}")
+                continue
 
             # Obtener historial y estado de sesión ANTES de guardar el mensaje actual
             historial = await obtener_historial(msg.telefono)
