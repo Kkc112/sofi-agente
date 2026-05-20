@@ -136,8 +136,9 @@ async def webhook_handler(request: Request):
                 respuesta = (
                     "Listo, empezamos de cero.\n\n"
                     "¡Hola! Soy Sofi, la IA de demostración.\n\n"
-                    "Sé que sos dueño de un negocio de servicios o eventos.\n\n"
-                    "Antes de mostrarte mis superpoderes, decime de forma directa: "
+                    "Sé que sos dueño de un negocio, empresa o profesional independiente "
+                    "que busca escalar su facturación y automatizar sus ventas por WhatsApp.\n\n"
+                    "Antes de mostrarte mis capacidades, decime de forma directa: "
                     "¿A qué nicho te dedicás, cómo se llama tu negocio y cuál es tu precio o ticket mínimo?"
                 )
                 await proveedor.enviar_mensaje(msg.telefono, respuesta)
