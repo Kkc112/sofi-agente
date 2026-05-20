@@ -142,6 +142,9 @@ async def webhook_handler(request: Request):
                     "¿A qué nicho te dedicás, cómo se llama tu negocio y cuál es tu precio o ticket mínimo?"
                 )
                 await proveedor.enviar_mensaje(msg.telefono, respuesta)
+                # Guardar el saludo en historial para que el próximo mensaje del usuario
+                # no llegue con historial vacío y brain no repita el greeting
+                await guardar_mensaje(msg.telefono, "assistant", respuesta)
                 logger.info(f"Sesión reiniciada para {msg.telefono}")
                 continue
 
