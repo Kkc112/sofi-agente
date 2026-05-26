@@ -21,7 +21,10 @@
       "Grep",
       "PowerShell(Copy-Item *)",
       "Bash(python *)",
-      "Bash(Remove-Item *)"
+      "Bash(Remove-Item *)",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\Magali\\\\whatsapp-agentkit\" -Recurse -Directory)",
+      "Bash(Select-Object -ExpandProperty FullName)",
+      "Bash(Sort-Object)"
     ]
   }
 }
