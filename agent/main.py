@@ -134,12 +134,8 @@ async def webhook_handler(request: Request):
             if msg.texto.strip().lower() in ("reiniciar", "reset"):
                 await limpiar_todo(msg.telefono)
                 respuesta = (
-                    "Listo, empezamos de cero.\n\n"
-                    "¡Hola! Soy Sofi, la IA de demostración.\n\n"
-                    "Sé que sos dueño de un negocio, empresa o profesional independiente "
-                    "que busca escalar su facturación y automatizar sus ventas por WhatsApp.\n\n"
-                    "Antes de mostrarte mis capacidades, decime de forma directa: "
-                    "¿A qué nicho te dedicás, cómo se llama tu negocio y cuál es tu precio o ticket mínimo?"
+                    "¡Hola! Qué gusto saludarte y darte la bienvenida a Estancia Las Camelias ✨ "
+                    "¿Qué tipo de evento estás pensando organizar?"
                 )
                 await proveedor.enviar_mensaje(msg.telefono, respuesta)
                 # Guardar el saludo en historial para que el próximo mensaje del usuario
