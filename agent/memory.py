@@ -41,7 +41,7 @@ class Mensaje(Base):
 class SesionData:
     """Estado de la sesión del usuario por número de teléfono."""
     telefono: str
-    fase: str = "ONBOARDING"           # ONBOARDING | SIMULATION | PITCH
+    fase: str = "SIMULATION"
     business_name: str | None = None
     min_price: str | None = None
     niche: str | None = None
@@ -52,7 +52,7 @@ class SesionUsuario(Base):
     __tablename__ = "sesiones"
 
     telefono: Mapped[str] = mapped_column(String(50), primary_key=True)
-    fase: Mapped[str] = mapped_column(String(20), default="ONBOARDING")
+    fase: Mapped[str] = mapped_column(String(20), default="SIMULATION")
     business_name: Mapped[str | None] = mapped_column(String(200), nullable=True)
     min_price: Mapped[str | None] = mapped_column(String(100), nullable=True)
     niche: Mapped[str | None] = mapped_column(String(200), nullable=True)
@@ -97,7 +97,13 @@ async def obtener_sesion(telefono: str) -> SesionData:
     async with async_session() as session:
         row = await session.get(SesionUsuario, telefono)
         if row is None:
-            return SesionData(telefono=telefono)
+            return SesionData(
+                telefono=telefono,
+                fase="SIMULATION",
+                business_name="Estancia Las Camelias",
+                niche="eventos premium",
+                min_price="$150 USD por persona",
+            )
         return SesionData(
             telefono=row.telefono,
             fase=row.fase,
