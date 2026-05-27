@@ -1,4 +1,4 @@
-# agent/brain.py — Cerebro del agente: Sofi de Estancia Las Camelias
+# agent/brain.py — Cerebro del agente: Sofi de Espacio Madero Eventos
 
 import os
 import yaml
@@ -30,7 +30,7 @@ async def procesar_mensaje(
     """
     Punto de entrada principal.
     El flujo de onboarding/demo está desactivado — Sofi responde directamente
-    como asistente de Estancia Las Camelias en todas las fases.
+    como asistente de Espacio Madero Eventos en todas las fases.
     """
     prompts = _cargar_prompts()
     return await _responder_como_sofi(mensaje, historial, sesion, prompts)
@@ -45,7 +45,7 @@ async def _responder_como_sofi(
     estancia = prompts.get("estancia_las_camelias", {})
     system_prompt = estancia.get(
         "system_prompt",
-        "Eres Sofi, la asistente comercial de Estancia Las Camelias. "
+        "Eres Sofi, la asistente comercial de Espacio Madero Eventos. "
         "Tu objetivo es calificar al interesado y agendar una llamada con Carol, la organizadora.",
     )
 

@@ -134,8 +134,9 @@ async def webhook_handler(request: Request):
             if msg.texto.strip().lower() in ("reiniciar", "reset"):
                 await limpiar_todo(msg.telefono)
                 respuesta = (
-                    "¡Hola! Qué gusto saludarte y darte la bienvenida a Estancia Las Camelias ✨ "
-                    "¿Qué tipo de evento estás pensando organizar?"
+                    "Hola! Soy Sofi, de Espacio Madero Eventos.\n\n"
+                    "Te ayudo a ver opciones, disponibilidad y valores orientativos para tu evento. "
+                    "Que tipo de evento estas organizando?"
                 )
                 await proveedor.enviar_mensaje(msg.telefono, respuesta)
                 # Guardar el saludo en historial para que el próximo mensaje del usuario

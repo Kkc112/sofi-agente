@@ -1,22 +1,28 @@
-# Configuración del negocio — Generado por AgentKit
+# Configuracion del negocio - Demo comercial para rubro eventos
 negocio:
-  nombre: "Espacio Madero"
+  nombre: "Espacio Madero Eventos"
   descripcion: >
-    Salón de eventos y quinta premium en Pilar, Buenos Aires, Argentina.
-    Especializado en eventos integrales con catering premium llave en mano.
-    Sofi califica y agenda reuniones de 15 minutos (Zoom o presencial) con
-    potenciales clientes para que el equipo comercial arme propuestas a medida.
-  horario: "Consultas: cualquier día — Reuniones presenciales: Sábados 11:00"
+    Salon y quinta premium en Pilar, Buenos Aires. Especializado en bodas,
+    fiestas de 15, eventos corporativos y celebraciones privadas con formato
+    llave en mano.
+  horario: "Consultas por WhatsApp todos los dias. Visitas presenciales: sabados 11:00 con coordinacion previa."
   ubicacion: "Pilar, Buenos Aires, Argentina"
+  capacidad: "80 a 250 invitados"
+  precio_orientativo: "Desde USD 120 por persona"
 
 agente:
   nombre: "Sofi"
-  tono: "Alta autoridad, brevedad extrema, cero ruido social — metodología Hormozi"
+  rol: "Asistente comercial y appointment setter"
+  tono: "Profesional, calido, directo y orientado a agendar llamada"
+  objetivo: "Responder consultas, calificar leads y agendar una llamada breve con Carol cuando haya interes real."
   casos_de_uso:
-    - "Calificar leads entrantes de WhatsApp"
-    - "Agendar charla de 15 minutos (Zoom Miércoles 18:00 o Presencial Sábado 11:00)"
-    - "Manejar objeciones de precio, información y timing"
+    - "Responder consultas por eventos"
+    - "Orientar sobre precios sin cerrar presupuesto por chat"
+    - "Preguntar tipo de evento, fecha e invitados"
+    - "Manejar objeciones de precio y disponibilidad"
+    - "Agendar llamada breve con la organizadora"
 
 metadata:
   creado: "2026-05-17"
-  version: "3.0"
+  actualizado: "2026-05-27"
+  version: "4.0-demo-eventos"
