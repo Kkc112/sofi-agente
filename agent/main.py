@@ -134,9 +134,9 @@ async def webhook_handler(request: Request):
             if msg.texto.strip().lower() in ("reiniciar", "reset"):
                 await limpiar_todo(msg.telefono)
                 respuesta = (
-                    "Hola! Soy Sofi, de Madero Event Solutions.\n\n"
-                    "Te ayudo a orientar tu evento, ver que servicio necesitas y coordinar una llamada breve "
-                    "con el equipo comercial. Que tipo de evento estas organizando?"
+                    "Hola, soy Sofi de Lumio Event Solutions.\n\n"
+                    "Te ayudo a orientar tu evento, entender el alcance y coordinar una llamada breve "
+                    "con el equipo comercial. ¿Qué tipo de evento estás organizando?"
                 )
                 await proveedor.enviar_mensaje(msg.telefono, respuesta)
                 # Guardar el saludo en historial para que el próximo mensaje del usuario

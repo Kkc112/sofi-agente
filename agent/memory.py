@@ -100,7 +100,7 @@ async def obtener_sesion(telefono: str) -> SesionData:
             return SesionData(
                 telefono=telefono,
                 fase="SIMULATION",
-                business_name="Madero Event Solutions",
+                business_name="Lumio Event Solutions",
                 niche="eventos integrales",
                 min_price="A medida segun alcance",
             )

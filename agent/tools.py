@@ -1,4 +1,4 @@
-# agent/tools.py — Herramientas del agente Sofi
+# agent/tools.py — Herramientas auxiliares del agente Sofi
 # Generado por AgentKit
 
 import os
@@ -24,7 +24,7 @@ def obtener_horario() -> dict:
     dia_semana = datetime.now().weekday()  # 0=lunes, 6=domingo
     esta_abierto = (dia_semana < 5) and (8 <= hora_actual < 20)
     return {
-        "horario": info.get("negocio", {}).get("horario", "Lunes a Viernes 08:00 a 20:00hs"),
+        "horario": info.get("negocio", {}).get("horario", "Consultas por WhatsApp"),
         "esta_abierto": esta_abierto,
     }
 
@@ -54,44 +54,45 @@ def buscar_en_knowledge(consulta: str) -> str:
     return "No encontré información específica sobre eso en mis archivos."
 
 
-# ── Calificación de nuevos pacientes ────────────────────────
-
-def registrar_paciente_nuevo(telefono: str, nombre: str, motivo: str, modalidad: str, cobertura: str) -> dict:
-    """Registra los datos relevados durante la calificación inicial del paciente."""
-    logger.info(f"Nuevo paciente calificado — {telefono}: {nombre} | Motivo: {motivo} | Modalidad: {modalidad} | Cobertura: {cobertura}")
+def registrar_lead_evento(
+    telefono: str,
+    tipo_evento: str,
+    fecha: str = "",
+    ciudad: str = "",
+    asistentes: str = "",
+    servicios: str = "",
+) -> dict:
+    """Registra datos básicos relevados durante la calificación comercial."""
+    logger.info(
+        "Lead de evento calificado — %s: %s | %s | %s | %s | %s",
+        telefono,
+        tipo_evento,
+        fecha,
+        ciudad,
+        asistentes,
+        servicios,
+    )
     return {
         "telefono": telefono,
-        "nombre": nombre,
-        "motivo": motivo,
-        "modalidad": modalidad,
-        "cobertura": cobertura,
-        "estado": "pendiente_turno",
+        "tipo_evento": tipo_evento,
+        "fecha": fecha,
+        "ciudad": ciudad,
+        "asistentes": asistentes,
+        "servicios": servicios,
+        "estado": "pendiente_llamada",
     }
 
 
-# ── Agenda de turnos ────────────────────────────────────────
-
-def confirmar_turno(telefono: str, nombre: str, fecha: str, hora: str, modalidad: str) -> dict:
+def registrar_llamada_comercial(telefono: str, fecha: str, hora: str) -> dict:
     """
-    Registra un turno confirmado.
-    En producción, aquí se integraría con Google Calendar API.
+    Registra una llamada comercial coordinada.
+    En producción, aquí se integraría con calendario o CRM.
     """
-    logger.info(f"Turno confirmado — {nombre} ({telefono}): {fecha} {hora} [{modalidad}]")
+    logger.info("Llamada comercial coordinada — %s: %s %s", telefono, fecha, hora)
     return {
-        "confirmado": True,
-        "paciente": nombre,
+        "coordinada": True,
+        "telefono": telefono,
         "fecha": fecha,
         "hora": hora,
-        "modalidad": modalidad,
-        "recordatorio": "Se enviará recordatorio 24hs y 1hs antes por WhatsApp",
-    }
-
-
-def cancelar_turno(telefono: str, motivo: str = "") -> dict:
-    """Registra la cancelación de un turno."""
-    logger.info(f"Turno cancelado — {telefono}. Motivo: {motivo}")
-    return {
-        "cancelado": True,
-        "telefono": telefono,
-        "mensaje": "Turno cancelado. Avisanos cuando quieras reagendar.",
+        "mensaje": "Llamada comercial coordinada.",
     }
