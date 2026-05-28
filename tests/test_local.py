@@ -1,4 +1,4 @@
-# tests/test_local.py — Simulador de chat en terminal (Espacio Madero Eventos)
+# tests/test_local.py — Simulador de chat en terminal (Madero Event Solutions)
 
 import asyncio
 import sys
@@ -41,7 +41,7 @@ async def main():
 
     print()
     print("=" * 60)
-    print("   Sofi — Espacio Madero Eventos")
+    print("   Sofi — Madero Event Solutions")
     print("   Asistente comercial y appointment setter")
     print("=" * 60)
     print(AYUDA)
@@ -52,9 +52,9 @@ async def main():
     historial_inicial = await obtener_historial(TELEFONO_TEST)
     if not historial_inicial:
         saludo = (
-            "Hola! Soy Sofi, de Espacio Madero Eventos.\n\n"
-            "Te ayudo a ver opciones, disponibilidad y valores orientativos para tu evento. "
-            "Que tipo de evento estas organizando?"
+            "Hola! Soy Sofi, de Madero Event Solutions.\n\n"
+            "Te ayudo a orientar tu evento, ver que servicio necesitas y coordinar una llamada breve "
+            "con el equipo comercial. Que tipo de evento estas organizando?"
         )
         print(f"Sofi: {saludo}\n")
         sesion_inicial = await obtener_sesion(TELEFONO_TEST)
@@ -78,9 +78,9 @@ async def main():
         if mensaje.lower() == "reset":
             await limpiar_todo(TELEFONO_TEST)
             saludo = (
-                "Hola! Soy Sofi, de Espacio Madero Eventos.\n\n"
-                "Te ayudo a ver opciones, disponibilidad y valores orientativos para tu evento. "
-                "Que tipo de evento estas organizando?"
+                "Hola! Soy Sofi, de Madero Event Solutions.\n\n"
+                "Te ayudo a orientar tu evento, ver que servicio necesitas y coordinar una llamada breve "
+                "con el equipo comercial. Que tipo de evento estas organizando?"
             )
             print(f"\nSofi: {saludo}\n")
             sesion_nueva = await obtener_sesion(TELEFONO_TEST)

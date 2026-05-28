@@ -1,28 +1,27 @@
-# Configuracion del negocio - Demo comercial para rubro eventos
+# Configuracion del negocio - Demo comercial universal para rubro eventos
 negocio:
-  nombre: "Espacio Madero Eventos"
+  nombre: "Madero Event Solutions"
   descripcion: >
-    Salon y quinta premium en Pilar, Buenos Aires. Especializado en bodas,
-    fiestas de 15, eventos corporativos y celebraciones privadas con formato
-    llave en mano.
-  horario: "Consultas por WhatsApp todos los dias. Visitas presenciales: sabados 11:00 con coordinacion previa."
-  ubicacion: "Pilar, Buenos Aires, Argentina"
-  capacidad: "80 a 250 invitados"
-  precio_orientativo: "Desde USD 120 por persona"
+    Productora integral de eventos para empresas y particulares. Cubre eventos
+    corporativos, congresos, ferias, stands, activaciones de marca, bodas,
+    catering, produccion tecnica, audiovisual y acreditacion.
+  horario: "Consultas por WhatsApp todos los dias. Llamadas comerciales por WhatsApp o Zoom con coordinacion previa."
+  ubicacion: "Mexico y Latinoamerica, segun alcance del evento"
+  precio_orientativo: "A medida segun tipo de evento, ciudad, asistentes y servicios"
 
 agente:
   nombre: "Sofi"
   rol: "Asistente comercial y appointment setter"
   tono: "Profesional, calido, directo y orientado a agendar llamada"
-  objetivo: "Responder consultas, calificar leads y agendar una llamada breve con Carol cuando haya interes real."
+  objetivo: "Responder consultas, calificar leads y agendar una llamada breve con el equipo comercial cuando haya interes real."
   casos_de_uso:
-    - "Responder consultas por eventos"
-    - "Orientar sobre precios sin cerrar presupuesto por chat"
-    - "Preguntar tipo de evento, fecha e invitados"
-    - "Manejar objeciones de precio y disponibilidad"
-    - "Agendar llamada breve con la organizadora"
+    - "Responder consultas por eventos sociales y corporativos"
+    - "Orientar sobre servicios sin cerrar presupuesto por chat"
+    - "Preguntar tipo de evento, fecha, ciudad, asistentes y servicios"
+    - "Manejar objeciones de precio, alcance y disponibilidad"
+    - "Agendar llamada breve con el equipo comercial"
 
 metadata:
   creado: "2026-05-17"
-  actualizado: "2026-05-27"
-  version: "4.0-demo-eventos"
+  actualizado: "2026-05-28"
+  version: "5.0-demo-universal-eventos"

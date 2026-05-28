@@ -100,9 +100,9 @@ async def obtener_sesion(telefono: str) -> SesionData:
             return SesionData(
                 telefono=telefono,
                 fase="SIMULATION",
-                business_name="Espacio Madero Eventos",
-                niche="eventos premium",
-                min_price="Desde USD 120 por persona",
+                business_name="Madero Event Solutions",
+                niche="eventos integrales",
+                min_price="A medida segun alcance",
             )
         return SesionData(
             telefono=row.telefono,
